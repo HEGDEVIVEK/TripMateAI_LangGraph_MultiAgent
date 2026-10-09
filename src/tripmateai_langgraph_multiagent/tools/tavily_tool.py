@@ -16,11 +16,10 @@ tavily_search = TavilySearch(
 )
 
 @tool
-def tavily_search_tool(question:str):
-    """
-    Perform a web search using Tavily Search.
-    """
-    result = tavily_search.invoke(question)
+def tavily_search_tool(search_query:str):
+    """ Perform a web search using Tavily Search. """
+    
+    result = tavily_search.invoke(search_query)
     all_result = []
     for res in result["results"]:
         title = res["title"].strip()

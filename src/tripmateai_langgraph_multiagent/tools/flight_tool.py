@@ -2,57 +2,22 @@ import os
 import requests
 
 from dotenv import load_dotenv
-from pydantic import BaseModel, Field
-from langchain.chat_models import init_chat_model
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.tools import tool
 
 load_dotenv()
 
-if os.environ.get("OPENAI_API_KEY"):
-    print("bro it is working")
+@tool
+def aviationStack_tool(dep_iata:str, arr_iata:str, limit:int):
 
-llm_model = init_chat_model("gpt-5-nano")
-
-class llm_schema(BaseModel):
-    dep_iata: str | None = Field(
-        description="Departure airport code: exactly 3 uppercase letters, such as BLR. Return null if missing or ambiguous.",
-        pattern=r"^[A-Z]{3}$"
-    )
-
-    arr_iata: str | None = Field(
-        description="Arrival airport code: exactly 3 uppercase letters, such as DEL. Return null if missing or ambiguous.",
-        pattern=r"^[A-Z]{3}$"
-    )
-
-    limit: int = Field(
-        default=3,
-        ge=1,
-        le=10,
-        description="Maximum flight records to return. Use 3 if unspecified."
-    )
-
-llm_with_structure = llm_model.with_structured_output(llm_schema)
-
-def aviationStack_tool(question:str):
-
+    """Fetch flight records using departure and arrival IATA codes and a result limit."""
+    
     api_key = os.getenv("AVIATIONSTACK_API_KEY")
-
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", "Extract the departure airport, arrival airport, and limit."
-        "Convert unambiguous city names to airport IATA codes."
-        "Return null for missing or ambiguous airports."
-        "Use a limit of 3 unless specified; keep it between 1 and 10."),
-        ("human", "{question}"),
-    ])
-
-    chain = prompt | llm_with_structure
-    parametrs = chain.invoke({"question" : question})
 
     params = {
         "access_key" : api_key,
-        "dep_iata" : parametrs.dep_iata,
-        "arr_iata" : parametrs.arr_iata,
-        "limit" : parametrs.limit
+        "dep_iata" : dep_iata,
+        "arr_iata" : arr_iata,
+        "limit" : limit
     }
 
     response = requests.get("http://api.aviationstack.com/v1/flights", params=params)

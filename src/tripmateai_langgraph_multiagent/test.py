@@ -1,9 +1,8 @@
-from tripmateai_langgraph_multiagent.tools.tavily_tool import tavily_search_tool
-from tripmateai_langgraph_multiagent.tools.flight_tool import aviationStack_tool
+from tripmateai_langgraph_multiagent.graph_excute import run_tripMate_agent
 
-# result = tavily_search_tool.invoke("3 Best Hotels in Bengaluru.")
-# print(result)
+final_response = run_tripMate_agent(
+    user_query="Find the cheapest flight from Delhi to Banglore and 2 nights hotel stay and 2 days I want to explore the tourist spot near banglore",
+    thread_id="test_user"
+    )
 
-result = aviationStack_tool("Flights from Bengaluru to Delhi.")
-print(result)
-
+print(final_response)
