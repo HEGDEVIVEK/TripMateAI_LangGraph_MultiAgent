@@ -9,7 +9,7 @@ if os.environ.get("OPENAI_API_KEY"):
 
 from langchain.chat_models import init_chat_model
 from langchain_core.prompts import ChatPromptTemplate
-from tripmateai_langgraph_multiagent.graphSchema import graph_schema
+from tripmateai_langgraph_multiagent.graph_schema import graph_schema
 
 llm_model = init_chat_model(model="gpt-5-nano")
 

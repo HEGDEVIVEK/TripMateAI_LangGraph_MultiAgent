@@ -10,7 +10,7 @@ from langchain.chat_models import init_chat_model
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import HumanMessage
 from tripmateai_langgraph_multiagent.tools.tavily_tool import tavily_search_tool
-from tripmateai_langgraph_multiagent.graphSchema import graph_schema
+from tripmateai_langgraph_multiagent.graph_schema import graph_schema
 
 llm_model = init_chat_model(model="gpt-5-nano")
 

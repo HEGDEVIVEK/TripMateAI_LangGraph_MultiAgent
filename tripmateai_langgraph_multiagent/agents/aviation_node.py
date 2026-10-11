@@ -1,4 +1,3 @@
-from pydantic import conset
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -12,7 +11,7 @@ from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage
 
 from tripmateai_langgraph_multiagent.tools.flight_tool import aviationStack_tool
-from tripmateai_langgraph_multiagent.graphSchema import graph_schema
+from tripmateai_langgraph_multiagent.graph_schema import graph_schema
 
 llm_model = init_chat_model(model="gpt-5-nano")
 
