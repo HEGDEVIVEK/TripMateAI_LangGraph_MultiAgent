@@ -24,56 +24,51 @@ function App() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    let cancelled = false;
 
     async function loadChats() {
       try {
-        const response = await fetch(`${API_URL}/chat-histroy`);
-
-        if (!response.ok) {
-          throw new Error("Could not load saved chats.");
-        }
-
+        const response = await fetch(`${API_URL}/all-chat-history`);
+        if (!response.ok) throw new Error("Could not load saved chats");
         const data = await response.json();
 
-        const savedChats = Object.entries(data).map(
-          ([threadId, state]) => ({
-            id: threadId,
-            title: (state.user_query || "Saved chat").slice(0, 50),
-            messages: [
-              {
-                id: crypto.randomUUID(),
-                role: "user",
-                content: state.user_query || "",
-              },
-              {
-                id: crypto.randomUUID(),
-                role: "assistant",
-                content: state.itinerary_result || "",
-              },
-            ].filter((message) => message.content.trim() !== ""),
-          })
-        );
+        const savedChats = Object.entries(data).map(([threadId, values]) => {
 
-        if (!cancelled) {
-          setChats([initialChat, ...savedChats]);
-        }
+          const allMessages = values.messages || []
+
+          const filteredMessages = allMessages.filter((message) => {
+            if (message.type === "human") return true;
+
+            if (message.type === "ai" && message.name === "itinerary_node") return true;
+
+            return false;
+          })
+
+          const messages = filteredMessages.map((message) => {
+            return {
+              id: message.id,
+              role: message.type,
+              content: message.content
+            }
+          })
+
+          return {
+            id: threadId,
+            title: messages[0]?.content.slice(0, 50) || "New Chat",
+            messages
+          }
+        })
+
+        setChats([initialChat, ...savedChats]);
+
       } catch (err) {
-        if (!cancelled) {
-          setError(err.message);
-        }
+        console.error("Error loading chats:", err);
+        setError("Failed to load chats. Please try again later.");
       } finally {
-        if (!cancelled) {
-          setHistoryLoading(false);
-        }
+        setHistoryLoading(false);
       }
     }
 
-    loadChats();
-
-    return () => {
-      cancelled = true;
-    };
+    loadChats()
   }, [initialChat]);
 
   function handleNewChat() {
@@ -90,8 +85,8 @@ function App() {
   }
 
   async function handleSend(text) {
-    const user_query = text.trim();
 
+    const user_query = text.trim();
     if (!user_query) return;
 
     const userMessage = {
@@ -114,9 +109,7 @@ function App() {
     try {
       const response = await fetch(`${API_URL}/chat`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_query: user_query,
           thread_id: activeChatId,
@@ -129,22 +122,31 @@ function App() {
 
       const data = await response.json();
 
-      const aiMessage = {
-        id: activeChatId,
-        role: "assistant",
-        content: data.itinerary_result
+      if (!Array.isArray(data.messages)) {
+        throw new Error("The backend returned invalid messages.");
       }
 
-      if (typeof data.itinerary_result !== "string" || !data.itinerary_result.trim()) {
-        throw new Error("The backend returned an empty itinerary.");
-      }
+      const filteredMessages = data.messages.filter((message) => {
+        if (message.type === "human") return true;
+
+        if (message.type === "ai" && message.name === "itinerary_node") return true;
+
+        return false;
+      })
+
+      const messages = filteredMessages.map((message) => {
+        return {
+          id: message.id,
+          role: message.type,
+          content: message.content
+        }
+      })
 
       setChats((previous) => previous.map((chat) => {
         if (chat.id !== activeChatId) return chat;
         return {
           ...chat,
-          title: chat.messages.length === 0 ? user_query.slice(0, 50) : chat.title,
-          messages: [...chat.messages, aiMessage]
+          messages: [...messages]
         }
       }))
     } catch (err) {

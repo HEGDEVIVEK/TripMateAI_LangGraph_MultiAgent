@@ -52,8 +52,10 @@ def hotel_agent_node(state: graph_schema):
         HumanMessage(content=f"Summarize the following hotel details in a human-readable format:\n\n{final_result}")
     ])
 
+    llm_answer.name = "hotel_node"
+
     return{
-        "hotel_result" : final_result,
+        "hotel_result" : llm_answer.content,
         "messages" : [llm_answer]
     }
 

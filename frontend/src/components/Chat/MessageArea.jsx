@@ -38,7 +38,7 @@ function MessageArea({ messages }) {
                         >
                             <div className="message-content">
                                 <span className="message-author">
-                                    {message.role === "user"
+                                    {message.role === "human"
                                         ? "You"
                                         : "TripMate AI"}
                                 </span>

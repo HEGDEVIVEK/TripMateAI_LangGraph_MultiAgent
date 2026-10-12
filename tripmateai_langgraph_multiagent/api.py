@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from tripmateai_langgraph_multiagent.graph_execute import run_tripMate_agent
-from tripmateai_langgraph_multiagent.chat_history import get_saved_threads
+from tripmateai_langgraph_multiagent.chat_history import get_saved_all_chats_postgres, get_saved_chat_with_thread_id, get_saved_all_chats_mongodb
 
 app = FastAPI()
 
@@ -37,9 +37,13 @@ def chat(request: ChatRequest):
 
     return {
         "thread_id": result["thread_id"],
-        "itinerary_result": result["itinerary_result"]
+        "messages": result["messages"],
     }
 
-@app.get("/chat-histroy")
-def chat_history():
-    return get_saved_threads()
+@app.get("/all-chat-history")
+def all_chat_history():
+    return get_saved_all_chats_mongodb()
+
+@app.get("/chat-history-threadid/{thread_id}")
+def chat_history_threadid(thread_id:str):
+    return get_saved_chat_with_thread_id(thread_id=thread_id)

@@ -61,8 +61,10 @@ def aviation_agent_node(state: graph_schema):
         HumanMessage(content=f"Summarize the following flight details in a human-readable format:\n\n{final_result}")
     ])
 
+    llm_answer.name = "aviation_node"
+    
     return{
-        "flight_result" : final_result,
+        "flight_result" : llm_answer.content,
         "messages" : [llm_answer]
     }
 

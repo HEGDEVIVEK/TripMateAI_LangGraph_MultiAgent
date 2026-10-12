@@ -58,8 +58,10 @@ def sightseeing_agent_node(state : graph_schema):
         HumanMessage(content=f"Summarize the following sightseeing details in a human-readable format:\n\n{final_result}")
     ])
 
+    llm_answer.name = "sightseeing_node"
+
     return{
-        "sightseeing_result" : final_result,
+        "sightseeing_result" : llm_answer.content,
         "messages" : [llm_answer]
     }
 

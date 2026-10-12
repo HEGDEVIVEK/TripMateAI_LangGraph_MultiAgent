@@ -41,11 +41,11 @@
     margin-bottom: 24px;
 }
 
-.message-row.user {
+.message-row.human {
     justify-content: flex-end;
 }
 
-.message-row.assistant {
+.message-row.ai {
     justify-content: flex-start;
 }
 
@@ -62,7 +62,7 @@
     font-weight: 600;
 }
 
-.user .message-author {
+.human .message-author {
     text-align: right;
 }
 
@@ -75,13 +75,13 @@
     overflow-wrap: anywhere;
 }
 
-.user .message-bubble {
+.human .message-bubble {
     background: #0f766e;
     color: white;
     border-bottom-right-radius: 4px;
 }
 
-.assistant .message-bubble {
+.ai .message-bubble {
     background: #f3f4f6;
     color: #1f2937;
     border-bottom-left-radius: 4px;

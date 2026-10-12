@@ -30,7 +30,7 @@ function Sidebar({
                         title={chat.title}
                         onClick={() => onSelectChat(chat.id)}
                     >
-                        {`${chat.title}...`}
+                        {`${chat.title}`}
                     </button>
                 ))}
             </nav>
