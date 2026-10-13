@@ -27,3 +27,13 @@ def tavily_search_tool(search_query:str):
         content = res["content"].strip()
         all_result.append(f"Title: {title}\nURL: {url}\nContent: {content}")
     return "\n\n".join(all_result)
+
+
+# from tavily import TavilyClient
+
+# @tool
+# def tavily_search_tool(search_query:str):
+#     """ Perform a web search using Tavily Search. """
+#     tavily_client = TavilyClient(api_key=os.environ.get("TAVILY_API_KEY"))
+#     response = tavily_client.search(search_query)
+#     return response

@@ -1,4 +1,5 @@
 import os
+import asyncio
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -9,7 +10,8 @@ from langchain.chat_models import init_chat_model
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage
-from tripmateai_langgraph_multiagent.tools.tavily_tool import tavily_search_tool
+#from tripmateai_langgraph_multiagent.tools.tavily_tool import tavily_search_tool
+from tripmateai_langgraph_multiagent.mcp_client.tavily_mcp import get_tavily_search_mcp_tool
 from tripmateai_langgraph_multiagent.graph_schema import graph_schema
 
 llm_model = init_chat_model(model="gpt-5-nano")
@@ -26,7 +28,7 @@ class llm_hotel_schema(BaseModel):
     )
 llm_with_hotel_structured_output = llm_model.with_structured_output(llm_hotel_schema)
 
-def hotel_agent_node(state: graph_schema):
+def hotel_agent_node(state:graph_schema):
 
     user_query = state["user_query"]
 
@@ -46,7 +48,8 @@ def hotel_agent_node(state: graph_schema):
 
     response = hotel_chain.invoke({"user_query" : user_query})
 
-    final_result = tavily_search_tool.invoke({"search_query" : response.search_query})
+    #final_result = get_tavily_search_mcp_tool.invoke({"search_query" : response.search_query})
+    final_result = asyncio.run(get_tavily_search_mcp_tool(response.search_query))
 
     llm_answer = llm_model.invoke([
         HumanMessage(content=f"Summarize the following hotel details in a human-readable format:\n\n{final_result}")
@@ -59,14 +62,14 @@ def hotel_agent_node(state: graph_schema):
         "messages" : [llm_answer]
     }
 
-# test_state = graph_schema(
-#     user_query = "I need to travel to Banglore form Delhi. Find hotels near Tin Factory in Banglore under 5000 INR per night.",
-#     messages = [],
-#     flight_result = [],
-#     hotel_result = "",
-#     itinerary_result = ""
-# )
+# state ={
+#     "user_query" : "I need to travel to Banglore form madgaon. Find hotels near railway station in madgaon",
+#     "messages" : [],
+#     "flight_result" : [],
+#     "hotel_result" : "",
+#     "itinerary_result" : ""
+# }
 
-# result = hotel_agent_node(test_state)
+# result = hotel_agent_node(state)
 # print(result["hotel_result"])
 
