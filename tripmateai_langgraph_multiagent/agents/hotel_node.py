@@ -10,8 +10,8 @@ from langchain.chat_models import init_chat_model
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage
-#from tripmateai_langgraph_multiagent.tools.tavily_tool import tavily_search_tool
-from tripmateai_langgraph_multiagent.mcp_client.tavily_mcp import get_tavily_search_mcp_tool
+from tripmateai_langgraph_multiagent.tools.tavily_tool import tavily_search_tool
+#from tripmateai_langgraph_multiagent.mcp_client.tavily_mcp import get_tavily_search_mcp_tool
 from tripmateai_langgraph_multiagent.graph_schema import graph_schema
 
 llm_model = init_chat_model(model="gpt-5-nano")
@@ -48,8 +48,8 @@ def hotel_agent_node(state:graph_schema):
 
     response = hotel_chain.invoke({"user_query" : user_query})
 
-    #final_result = get_tavily_search_mcp_tool.invoke({"search_query" : response.search_query})
-    final_result = asyncio.run(get_tavily_search_mcp_tool(response.search_query))
+    final_result = tavily_search_tool.invoke({"search_query" : response.search_query})
+    #final_result = asyncio.run(get_tavily_search_mcp_tool(response.search_query))
 
     llm_answer = llm_model.invoke([
         HumanMessage(content=f"Summarize the following hotel details in a human-readable format:\n\n{final_result}")

@@ -12,7 +12,7 @@ async def get_tavily_search_mcp_tool(search_query : str | None = None):
     if not tavily_api:
         raise ValueError("TAVILY_API_KEY is not set")
 
-    mcp_client = MultiServerMCPClient(
+    tvaily_mcp_client = MultiServerMCPClient(
         {
             "tavily": {
                 "transport": "http",
@@ -21,7 +21,7 @@ async def get_tavily_search_mcp_tool(search_query : str | None = None):
         }
     )
 
-    tools = await mcp_client.get_tools()
+    tools = await tvaily_mcp_client.get_tools()
     
     for tool in tools:
         if tool.name == "tavily_search":
