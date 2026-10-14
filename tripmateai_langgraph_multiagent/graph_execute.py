@@ -21,7 +21,8 @@ def run_tripMate_agent(user_query : str, thread_id:str | None = None):
     result = final_graph.invoke({
         "messages": [HumanMessage(content=user_query)],
         "user_query": user_query,
-        "flight_result" : [],
+        "flight_result" : "",
+        "weather_result" : "",
         "hotel_result" : "",
         "sightseeing_result" : "",
         "itinerary_result" : ""
@@ -31,10 +32,5 @@ def run_tripMate_agent(user_query : str, thread_id:str | None = None):
 
     return {
         "thread_id" : thread_id,
-        "messages" : result["messages"],
-        "user_query" : result["user_query"],
-        "flight_result" : result["flight_result"],
-        "hotel_result" : result["hotel_result"],
-        "sightseeing_result" : result["sightseeing_result"],
-        "itinerary_result" : result["itinerary_result"],
+        "messages" : result["messages"]
     }

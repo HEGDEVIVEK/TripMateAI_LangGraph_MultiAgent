@@ -20,6 +20,7 @@ def itinerary_agent_node(state: graph_schema):
     flight_result = state["flight_result"]
     hotel_result = state["hotel_result"]
     sightseeing_result = state["sightseeing_result"]
+    weather_result = state["weather_result"]
 
     # Your flight tool returns a list of dictionaries.
     flight_text = (
@@ -49,6 +50,7 @@ def itinerary_agent_node(state: graph_schema):
               - Trip summary: one sentence.
               - Flights: up to 2 options, one line each, only if relevant.
               - Hotels: up to 2 options with area and nightly price if supplied.
+              - Weather details: in a human-readable format and give suggetion whether it is good time to visit based on the weather condition:
               - Itinerary: one compact table:
                 Day | Morning | Afternoon | Evening
               - Essential notes: at most 2 short bullets for uncertainties or closures.
@@ -61,9 +63,10 @@ def itinerary_agent_node(state: graph_schema):
         (
             "human",
             "User request:\n{user_query}\n\n"
-            "Flight research:\n{flight_results}\n\n"
-            "Hotel research:\n{hotel_results}\n\n"
-            "Sightseeing research:\n{sightseeing_results}"
+            "Flight research:\n{flight_result}\n\n"
+            "Hotel research:\n{hotel_result}\n\n"
+            "Sightseeing research:\n{sightseeing_result}\n\n"
+            "weather_result:\n{weather_result}\n\n"
         )
     ])
 
@@ -71,9 +74,10 @@ def itinerary_agent_node(state: graph_schema):
 
     llm_answer = itinerary_chain.invoke({
         "user_query": user_query,
-        "flight_results": flight_text,
-        "hotel_results": hotel_result,
-        "sightseeing_results": sightseeing_result
+        "flight_result": flight_result,
+        "hotel_result": hotel_result,
+        "sightseeing_result": sightseeing_result,
+        "weather_result": weather_result
     })
 
     llm_answer.name = "itinerary_node"
