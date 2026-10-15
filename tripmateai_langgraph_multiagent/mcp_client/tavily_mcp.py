@@ -5,8 +5,6 @@ from langchain_mcp_adapters.client import MultiServerMCPClient
 load_dotenv()
 
 async def get_tavily_search_mcp_tool(search_query : str | None = None):
-    tvaily_search_mcp_tool = None
-
     tavily_api = os.environ.get("TAVILY_API_KEY")
 
     if not tavily_api:
@@ -25,9 +23,5 @@ async def get_tavily_search_mcp_tool(search_query : str | None = None):
     
     for tool in tools:
         if tool.name == "tavily_search":
-            tvaily_search_mcp_tool = tool
-            break
-
-    if search_query:
-        result = await tvaily_search_mcp_tool.ainvoke({"query" : search_query})
-        return result
+            result = await tool.ainvoke({"query" : search_query})
+            return result

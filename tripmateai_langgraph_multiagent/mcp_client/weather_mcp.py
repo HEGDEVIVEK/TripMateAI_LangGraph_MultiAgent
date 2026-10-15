@@ -46,6 +46,7 @@ async def get_weather_mcp_tool(city : str):
     )
     
     tools = await weather_mcp_client.get_tools()
+    
     for tool in tools:
         if tool.name == "get_weather":
             result = await tool.ainvoke({"city" : city})
