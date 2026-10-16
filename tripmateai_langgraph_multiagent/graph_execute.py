@@ -4,7 +4,7 @@ import uuid
 from langchain_core.messages import HumanMessage
 from tripmateai_langgraph_multiagent.final_graph import final_graph
 
-# final_graph.get_graph().draw_mermaid_png(output_file_path="tripmate_ai_graph.png")
+#final_graph.get_graph().draw_mermaid_png(output_file_path="tripmate_ai_graph.png")
 # config = {"configurable": {"thread_id": "test_user"}}
 # print(final_graph.get_state(config))
 
@@ -25,7 +25,11 @@ def run_tripMate_agent(user_query : str, thread_id:str | None = None):
         "weather_result" : "",
         "hotel_result" : "",
         "sightseeing_result" : "",
-        "itinerary_result" : ""
+        "itinerary_result" : "",
+        "guardrail_allowed" : "",
+        "guardrail_reason" : "",
+        "selected_agents" : [],
+        "supervisor_reasoning" : ""  
     },
     config=config
     )

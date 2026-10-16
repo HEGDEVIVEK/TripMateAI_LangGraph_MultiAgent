@@ -38,7 +38,7 @@ function App() {
           const filteredMessages = allMessages.filter((message) => {
             if (message.type === "human") return true;
 
-            if (message.type === "ai" && message.name === "itinerary_node") return true;
+            if (message.type === "ai" && (message.name === "itinerary_node" || message.name === "guardrail_node" || message.name === "supervisor_node")) return true;
 
             return false;
           })
@@ -129,7 +129,7 @@ function App() {
       const filteredMessages = data.messages.filter((message) => {
         if (message.type === "human") return true;
 
-        if (message.type === "ai" && message.name === "itinerary_node") return true;
+        if (message.type === "ai" && (message.name === "itinerary_node" || message.name === "guardrail_node" || message.name === "supervisor_node")) return true;
 
         return false;
       })
