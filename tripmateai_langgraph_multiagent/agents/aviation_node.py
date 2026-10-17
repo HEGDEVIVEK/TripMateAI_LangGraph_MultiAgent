@@ -9,6 +9,7 @@ from langchain.chat_models import init_chat_model
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage
+from langchain_core.prompts import MessagesPlaceholder
 
 from tripmateai_langgraph_multiagent.tools.flight_tool import aviationStack_tool
 from tripmateai_langgraph_multiagent.graph_schema import graph_schema
@@ -17,39 +18,95 @@ llm_model = init_chat_model(model="gpt-5-nano")
 
 
 class llm_aviation_schema(BaseModel):
-    dep_iata : str | None = Field(
-        description="Departure airport code: exactly 3 uppercase letters, such as BLR. Return null if missing or ambiguous.",
-        pattern=r"^[A-Z]{3}$"
+    dep_iata: str | None = Field(
+        description=(
+            "Departure airport for the current trip, resolved from "
+            "the conversation and latest corrections. Preserve an "
+            "earlier departure unless changed. Return null only if "
+            "unresolved or ambiguous after considering the history."
+        ),
+        pattern=r"^[A-Z]{3}$",
     )
 
-    arr_iata : str | None = Field(
-        description="Arrival airport code: exactly 3 uppercase letters, such as DEL. Return null if missing or ambiguous.",
-        pattern=r"^[A-Z]{3}$"
+    arr_iata: str | None = Field(
+        description=(
+            "Arrival airport for the current trip, resolved from "
+            "the conversation and latest corrections. Preserve an "
+            "earlier arrival unless changed. Return null only if "
+            "unresolved or ambiguous after considering the history."
+        ),
+        pattern=r"^[A-Z]{3}$",
     )
 
-    limit : int = Field(
+    limit: int = Field(
         default=2,
         ge=1,
         le=10,
-        description="Maximum flight records to return. Use 2 if unspecified."
+        description=(
+            "Maximum flight records. Preserve the previously requested "
+            "limit unless changed. Use 2 when no limit was provided."
+        ),
     )
 llm_with_aviation_structured_output = llm_model.with_structured_output(llm_aviation_schema)
 
-def aviation_agent_node(state: graph_schema):
+def aviation_agent_node(state : graph_schema):
 
-    user_query = state["user_query"]
+    history = state["messages"]
 
     aviation_prompt = ChatPromptTemplate.from_messages([
-        ("system", "Extract the departure airport, arrival airport, and limit."
-        "Convert unambiguous city names to airport IATA codes."
-        "Return null for missing or ambiguous airports."
-        "Use a limit of 2 unless specified; keep it between 1 and 10."),
-        ("human", "{user_query}"),
-    ])
+    (
+        "system",
+        """
+Resolve the CURRENT flight route from the conversation.
+
+Read the messages chronologically:
+1. Identify the user's established departure and arrival.
+2. Apply later corrections only to the fields being changed.
+3. Preserve fields that the user has not changed.
+
+A field absent from the latest message is NOT missing if it
+was established earlier for the same trip.
+
+Interpret "sorry", "actually", and "instead" as corrections
+to the existing trip unless the user explicitly starts a new trip.
+
+Examples:
+- Earlier: "Flights from Bangalore to Delhi."
+  Latest: "Sorry, I will travel from Chennai."
+  Result: dep_iata="MAA", arr_iata="DEL", limit=2.
+
+- Earlier: "Flights from Bangalore to Delhi."
+  Latest: "Actually, I want to go to Mumbai."
+  Result: dep_iata="BLR", arr_iata="BOM", limit=2.
+
+- Latest: "A new trip: flights from Chennai."
+  No destination is provided for this new trip.
+  Result: dep_iata="MAA", arr_iata=null, limit=2.
+
+Convert unambiguous airport locations to IATA codes.
+Do not invent airports or silently substitute another city.
+Return null only when a field remains missing or ambiguous
+after resolving the relevant conversation.
+
+Preserve an earlier result limit unless changed.
+Use 2 if unspecified; keep it between 1 and 10.
+"""
+    ),
+    MessagesPlaceholder(variable_name="history"),
+])
 
     aviation_chain = aviation_prompt | llm_with_aviation_structured_output
 
-    response = aviation_chain.invoke({"user_query" : user_query})
+    response = aviation_chain.invoke({"history" : history})
+    
+    if response.dep_iata is None or response.arr_iata is None:
+        return {
+            "flight_result": (
+                "Flight search was not performed because the departure "
+                "or arrival airport is missing or ambiguous. "
+                "Ask the user to clarify the airports."
+            )
+        }
 
     final_result = aviationStack_tool.invoke({
         "dep_iata" : response.dep_iata,
@@ -68,13 +125,3 @@ def aviation_agent_node(state: graph_schema):
         "messages" : [llm_answer]
     }
 
-
-# test_state = {
-#     "user_query": "I need to travel to Banglore form Delhi. Find hotels near Tin Factory in Banglore under 5000 INR per night.",
-#     "messages": [],
-#     "flight_result": [],
-#     "hotel_result": "",
-#     "itinerary": "",
-# }
-# result = aviation_agent_node(test_state)
-# print(result["flight_result"])

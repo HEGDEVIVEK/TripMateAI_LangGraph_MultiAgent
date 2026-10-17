@@ -1,4 +1,3 @@
-from pydantic import conset
 import os
 import json
 from dotenv import load_dotenv
@@ -8,7 +7,7 @@ if os.environ.get("OPENAI_API_KEY"):
     print("bro it is working")
 
 from langchain.chat_models import init_chat_model
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate,MessagesPlaceholder
 from tripmateai_langgraph_multiagent.graph_schema import graph_schema
 
 llm_model = init_chat_model(model="gpt-5-nano")
@@ -16,18 +15,12 @@ llm_model = init_chat_model(model="gpt-5-nano")
 def itinerary_agent_node(state: graph_schema):
     """Combine flight, hotel, and sightseeing results into a travel plan."""
 
+    history = state["messages"]
     user_query = state["user_query"]
     flight_result = state["flight_result"]
     hotel_result = state["hotel_result"]
     sightseeing_result = state["sightseeing_result"]
     weather_result = state["weather_result"]
-
-    # Your flight tool returns a list of dictionaries.
-    flight_text = (
-        flight_result
-        if isinstance(flight_result, str)
-        else json.dumps(flight_result, ensure_ascii=False)
-    )
 
     itinerary_prompt = ChatPromptTemplate.from_messages([
         (
@@ -139,6 +132,19 @@ ESTIMATED BUDGET
   fits it. If major costs are missing, say this cannot yet be confirmed.
 - Never describe a trip as within budget based on an incomplete subtotal.
 
+CONVERSATION HISTORY
+- Use the conversation to understand the latest user request.
+- Preserve earlier trip details unless the user changes them.
+- The latest user corrections override earlier details.
+- Treat previous assistant answers as context, not verified current facts.
+- Use the supplied research for current findings.
+- If the user only asks about hotels, flights, weather, or sightseeing,
+  answer that request directly instead of forcing a full itinerary.
+- Use the full itinerary format below only when the user requests
+  a complete trip plan.
+- If no new research is supplied, use the conversation to revise
+  the previous answer without claiming fresh verification.
+
 OUTPUT FORMAT
 
 **Your [duration]-day trip to [destination]**
@@ -181,19 +187,24 @@ STYLE
 - Make uncertainty clear without overwhelming the traveler.
 """
         ),
+        MessagesPlaceholder(variable_name="history"),
         (
             "human",
+            "Reference research collected for this turn "
             "User request:\n{user_query}\n\n"
             "Flight research:\n{flight_result}\n\n"
             "Hotel research:\n{hotel_result}\n\n"
             "Sightseeing research:\n{sightseeing_result}\n\n"
             "weather_result:\n{weather_result}\n\n"
+            "Use this research and the conversation to answer "
+            "the latest user request."
         )
     ])
 
     itinerary_chain = itinerary_prompt | llm_model
 
     llm_answer = itinerary_chain.invoke({
+        "history" : history,
         "user_query": user_query,
         "flight_result": flight_result,
         "hotel_result": hotel_result,

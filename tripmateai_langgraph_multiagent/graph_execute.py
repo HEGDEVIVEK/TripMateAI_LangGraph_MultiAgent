@@ -4,7 +4,6 @@ import uuid
 from langchain_core.messages import HumanMessage
 from tripmateai_langgraph_multiagent.final_graph import final_graph
 
-#final_graph.get_graph().draw_mermaid_png(output_file_path="tripmate_ai_graph.png")
 # config = {"configurable": {"thread_id": "test_user"}}
 # print(final_graph.get_state(config))
 

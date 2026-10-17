@@ -80,3 +80,5 @@ graph.add_edge("weather_agent_node", "itinerary_agent_node")
 graph.add_edge("itinerary_agent_node", END)
 
 final_graph = graph.compile(checkpointer=mongodb_checkpointer)
+
+final_graph.get_graph().draw_mermaid_png(output_file_path="tripmate_ai_graph.png")
