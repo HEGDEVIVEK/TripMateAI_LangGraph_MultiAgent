@@ -41,6 +41,9 @@ async def get_weather_mcp_tool(city : str):
                 "transport": "stdio",
                 "command": sys.executable,
                 "args": [str(Path(__file__).resolve())],
+                "env": {
+                    "WEATHER_API_KEY": os.environ["WEATHER_API_KEY"],
+                },  
             }
         }
     )
