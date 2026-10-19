@@ -7,9 +7,17 @@ import "./App.css";
 //const API_URL = "http://127.0.0.1:8000";
 const API_URL = "/api";
 
+function createId() {
+  if (typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
 function createChat() {
   return {
-    id: crypto.randomUUID(),
+    id: createId(),
     title: "New chat",
     messages: [],
   };
@@ -91,7 +99,7 @@ function App() {
     if (!user_query) return;
 
     const userMessage = {
-      id: crypto.randomUUID(),
+      id: createId(),
       role: "user",
       content: user_query,
     }
