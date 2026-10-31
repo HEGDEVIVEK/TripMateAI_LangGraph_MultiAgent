@@ -1,8 +1,7 @@
 [project]
-name = "tripmateai-langgraph-multiagent"
+name = "langgraph-backend"
 version = "0.1.0"
 description = "Add your description here"
-readme = "README.md"
 authors = [
     { name = "Vivek Hegde", email = "vivekshegde2001@example.com" }
 ]
@@ -32,12 +31,10 @@ dependencies = [
     "uvicorn==0.48.0",
 ]
 
-[project.scripts]
-tripmateai-langgraph-multiagent = "tripmateai_langgraph_multiagent:main"
-
 [build-system]
 requires = ["uv_build>=0.12.13,<0.13.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
+module-name="src"
 module-root = ""

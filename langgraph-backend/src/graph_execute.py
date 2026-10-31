@@ -2,7 +2,7 @@ import os
 import uuid
 
 from langchain_core.messages import HumanMessage
-from tripmateai_langgraph_multiagent.final_graph import final_graph
+from src.final_graph import final_graph
 
 # config = {"configurable": {"thread_id": "test_user"}}
 # print(final_graph.get_state(config))

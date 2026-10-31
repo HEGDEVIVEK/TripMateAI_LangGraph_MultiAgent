@@ -8,10 +8,10 @@ COPY pyproject.toml uv.lock ./
 
 RUN uv sync --locked --no-dev --no-install-project
 
-COPY tripmateai_langgraph_multiagent ./tripmateai_langgraph_multiagent
+COPY src ./src
 
 ENV PATH="/app/.venv/bin:$PATH"
 
 EXPOSE 8000
 
-CMD ["python", "-m", "uvicorn", "tripmateai_langgraph_multiagent.api:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "8000"]

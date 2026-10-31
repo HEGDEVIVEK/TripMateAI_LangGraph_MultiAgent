@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from tripmateai_langgraph_multiagent.graph_execute import run_tripMate_agent
-from tripmateai_langgraph_multiagent.chat_history import get_saved_all_chats_postgres, get_saved_chat_with_thread_id, get_saved_all_chats_mongodb
+from src.graph_execute import run_tripMate_agent
+from src.chat_history import get_saved_all_chats_postgres, get_saved_chat_with_thread_id, get_saved_all_chats_mongodb
 
 app = FastAPI()
 

@@ -1,6 +1,6 @@
 from langchain_core.messages import HumanMessage, AIMessage
-from tripmateai_langgraph_multiagent.agents.hotel_node import hotel_agent_node
-from tripmateai_langgraph_multiagent.agents.aviation_node import aviation_agent_node
+from src.agents.hotel_node import hotel_agent_node
+from src.agents.aviation_node import aviation_agent_node
 
 '''
 hotel_agent_node({

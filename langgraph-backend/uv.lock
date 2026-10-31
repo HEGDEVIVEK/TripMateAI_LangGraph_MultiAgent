@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.14'",
@@ -1055,6 +1055,61 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/e6/5a/ffc12434ee8aecab830d58b4d204ddea45073eae7639c963310f671a5bf5/langgraph-1.2.2.tar.gz", hash = "sha256:f54a98458976b3ff0774683867df125fb52d8dbedeb2441d0b0656a51331cee5", size = 695730, upload-time = "2026-05-26T18:07:28.49Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/42/9b/b08d578bba73e25351152dfd3d6d21e81210a5fff1b6f26e56f33197c8f5/langgraph-1.2.2-py3-none-any.whl", hash = "sha256:0a851bf4ba5939c5474a2fd57e6b439b5315283e254e42943bd392c2d71a5e03", size = 236376, upload-time = "2026-05-26T18:07:26.577Z" },
+]
+
+[[package]]
+name = "langgraph-backend"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "airportsdata" },
+    { name = "fastapi" },
+    { name = "httpx" },
+    { name = "jinja2" },
+    { name = "langchain" },
+    { name = "langchain-community" },
+    { name = "langchain-groq" },
+    { name = "langchain-mcp-adapters" },
+    { name = "langchain-openai" },
+    { name = "langchain-tavily" },
+    { name = "langgraph" },
+    { name = "langgraph-checkpoint-mongodb" },
+    { name = "langgraph-checkpoint-postgres" },
+    { name = "mcp" },
+    { name = "psycopg", extra = ["binary"] },
+    { name = "psycopg-pool" },
+    { name = "pycountry" },
+    { name = "pymongo" },
+    { name = "python-dotenv" },
+    { name = "requests" },
+    { name = "tavily-python" },
+    { name = "uvicorn" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "airportsdata", specifier = "==20260315" },
+    { name = "fastapi", specifier = "==0.136.3" },
+    { name = "httpx", specifier = ">=0.28.1" },
+    { name = "jinja2", specifier = "==3.1.6" },
+    { name = "langchain", specifier = "==1.3.2" },
+    { name = "langchain-community", specifier = "==0.4.2" },
+    { name = "langchain-groq", specifier = "==1.1.3" },
+    { name = "langchain-mcp-adapters", specifier = ">=0.3.2" },
+    { name = "langchain-openai", specifier = ">=1.6.7" },
+    { name = "langchain-tavily", specifier = "==0.2.18" },
+    { name = "langgraph", specifier = "==1.2.2" },
+    { name = "langgraph-checkpoint-mongodb", specifier = ">=0.5.1" },
+    { name = "langgraph-checkpoint-postgres", specifier = "==3.1.0" },
+    { name = "mcp", specifier = ">=1.2,<2" },
+    { name = "psycopg", extras = ["binary"], specifier = "==3.3.4" },
+    { name = "psycopg-pool", specifier = "==3.3.1" },
+    { name = "pycountry", specifier = "==26.2.16" },
+    { name = "pymongo", specifier = ">=4.18.3" },
+    { name = "python-dotenv", specifier = "==1.2.2" },
+    { name = "requests", specifier = "==2.34.2" },
+    { name = "tavily-python", specifier = "==0.7.24" },
+    { name = "uvicorn", specifier = "==0.48.0" },
 ]
 
 [[package]]
@@ -2523,61 +2578,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/4e/f6/80760e98a08e6649d2d68afb6035af713121dfb615acce8c4f73810ec438/tiktoken-0.14.0-cp315-cp315t-musllinux_1_2_aarch64.whl", hash = "sha256:86f66c85e796f5d05d5c4a60ec1d40cbfebc47a32464053528c797163fa9ab89", size = 1251479, upload-time = "2026-08-17T19:49:36.419Z" },
     { url = "https://files.pythonhosted.org/packages/c5/84/50966fb6918a0fb9b32721277e5342bf729a2d74350074d662fbedf9772e/tiktoken-0.14.0-cp315-cp315t-musllinux_1_2_x86_64.whl", hash = "sha256:149d97453c4c98c04b081d64a85e635921269b532710d6faf81e9e82b790e7d3", size = 1316673, upload-time = "2026-08-17T19:49:37.756Z" },
     { url = "https://files.pythonhosted.org/packages/35/5e/9b01afd037bfa22a0033963fa091e0f75b6fb15cd85bffb42ff86e697323/tiktoken-0.14.0-cp315-cp315t-win_amd64.whl", hash = "sha256:561e7580f84a79859af1ef6f676968e9030fcc3fe195700b15235bca64f009c9", size = 987929, upload-time = "2026-08-17T19:49:38.947Z" },
-]
-
-[[package]]
-name = "tripmateai-langgraph-multiagent"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "airportsdata" },
-    { name = "fastapi" },
-    { name = "httpx" },
-    { name = "jinja2" },
-    { name = "langchain" },
-    { name = "langchain-community" },
-    { name = "langchain-groq" },
-    { name = "langchain-mcp-adapters" },
-    { name = "langchain-openai" },
-    { name = "langchain-tavily" },
-    { name = "langgraph" },
-    { name = "langgraph-checkpoint-mongodb" },
-    { name = "langgraph-checkpoint-postgres" },
-    { name = "mcp" },
-    { name = "psycopg", extra = ["binary"] },
-    { name = "psycopg-pool" },
-    { name = "pycountry" },
-    { name = "pymongo" },
-    { name = "python-dotenv" },
-    { name = "requests" },
-    { name = "tavily-python" },
-    { name = "uvicorn" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "airportsdata", specifier = "==20260315" },
-    { name = "fastapi", specifier = "==0.136.3" },
-    { name = "httpx", specifier = ">=0.28.1" },
-    { name = "jinja2", specifier = "==3.1.6" },
-    { name = "langchain", specifier = "==1.3.2" },
-    { name = "langchain-community", specifier = "==0.4.2" },
-    { name = "langchain-groq", specifier = "==1.1.3" },
-    { name = "langchain-mcp-adapters", specifier = ">=0.3.2" },
-    { name = "langchain-openai", specifier = ">=1.6.7" },
-    { name = "langchain-tavily", specifier = "==0.2.18" },
-    { name = "langgraph", specifier = "==1.2.2" },
-    { name = "langgraph-checkpoint-mongodb", specifier = ">=0.5.1" },
-    { name = "langgraph-checkpoint-postgres", specifier = "==3.1.0" },
-    { name = "mcp", specifier = ">=1.2,<2" },
-    { name = "psycopg", extras = ["binary"], specifier = "==3.3.4" },
-    { name = "psycopg-pool", specifier = "==3.3.1" },
-    { name = "pycountry", specifier = "==26.2.16" },
-    { name = "pymongo", specifier = ">=4.18.3" },
-    { name = "python-dotenv", specifier = "==1.2.2" },
-    { name = "requests", specifier = "==2.34.2" },
-    { name = "tavily-python", specifier = "==0.7.24" },
-    { name = "uvicorn", specifier = "==0.48.0" },
 ]
 
 [[package]]

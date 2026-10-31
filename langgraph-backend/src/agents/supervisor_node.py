@@ -12,7 +12,7 @@ load_dotenv()
 if os.environ.get("OPENAI_API_KEY"):
     print("bro it is working")
 
-from tripmateai_langgraph_multiagent.graph_schema import graph_schema
+from src.graph_schema import graph_schema
 from langchain.chat_models import init_chat_model
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import AIMessage

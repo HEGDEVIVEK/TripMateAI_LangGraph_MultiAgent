@@ -9,9 +9,9 @@ if os.environ.get("OPENAI_API_KEY"):
 from pydantic import BaseModel, Field
 from langchain.chat_models import init_chat_model
 from langchain_core.prompts import ChatPromptTemplate
-from tripmateai_langgraph_multiagent.graph_schema import graph_schema
+from src.graph_schema import graph_schema
 from langchain_core.messages import HumanMessage
-from tripmateai_langgraph_multiagent.mcp_client.weather_mcp import get_weather_mcp_tool
+from src.mcp_client.weather_mcp import get_weather_mcp_tool
 from langchain_core.prompts import MessagesPlaceholder
 
 llm_model = init_chat_model(model="gpt-5-nano")

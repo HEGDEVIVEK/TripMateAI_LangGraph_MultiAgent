@@ -1,7 +1,7 @@
 from langgraph.checkpoint.postgres import PostgresSaver
-from tripmateai_langgraph_multiagent.database import get_postgres_conn
+from src.database import get_postgres_conn
 from langgraph.checkpoint.mongodb import MongoDBSaver
-from tripmateai_langgraph_multiagent.database import get_mongodb_client
+from src.database import get_mongodb_client
 
 
 def get_saved_all_chats_postgres():

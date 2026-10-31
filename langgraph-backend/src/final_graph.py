@@ -2,20 +2,20 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from langgraph.graph import StateGraph, START, END
-from tripmateai_langgraph_multiagent.graph_schema import graph_schema
+from src.graph_schema import graph_schema
 
-from tripmateai_langgraph_multiagent.agents.guardrail_node import guadrail_agent_node
-from tripmateai_langgraph_multiagent.agents.supervisor_node import supervisor_agent_node
-from tripmateai_langgraph_multiagent.agents.aviation_node import aviation_agent_node
-from tripmateai_langgraph_multiagent.agents.hotel_node import hotel_agent_node
-from tripmateai_langgraph_multiagent.agents.sightseeing_node import sightseeing_agent_node
-from tripmateai_langgraph_multiagent.agents.itinerary_node import itinerary_agent_node
-from tripmateai_langgraph_multiagent.agents.weather_node import weather_agent_node
+from src.agents.guardrail_node import guadrail_agent_node
+from src.agents.supervisor_node import supervisor_agent_node
+from src.agents.aviation_node import aviation_agent_node
+from src.agents.hotel_node import hotel_agent_node
+from src.agents.sightseeing_node import sightseeing_agent_node
+from src.agents.itinerary_node import itinerary_agent_node
+from src.agents.weather_node import weather_agent_node
 
-from tripmateai_langgraph_multiagent.database import get_postgres_conn
+from src.database import get_postgres_conn
 from langgraph.checkpoint.postgres import PostgresSaver
 from langgraph.checkpoint.mongodb import MongoDBSaver
-from tripmateai_langgraph_multiagent.database import get_mongodb_client
+from src.database import get_mongodb_client
 
 # conn = get_postgres_conn()
 # checkpointer = PostgresSaver(conn)

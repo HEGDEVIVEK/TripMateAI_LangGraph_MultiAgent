@@ -10,9 +10,9 @@ from langchain.chat_models import init_chat_model
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage, AIMessage
-from tripmateai_langgraph_multiagent.tools.tavily_tool import tavily_search_tool
-#from tripmateai_langgraph_multiagent.mcp_client.tavily_mcp import get_tavily_search_mcp_tool
-from tripmateai_langgraph_multiagent.graph_schema import graph_schema
+from src.tools.tavily_tool import tavily_search_tool
+#from src.mcp_client.tavily_mcp import get_tavily_search_mcp_tool
+from src.graph_schema import graph_schema
 from langchain.agents import create_agent
 
 llm_model = init_chat_model(model="gpt-5-nano")

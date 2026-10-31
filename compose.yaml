@@ -1,16 +1,16 @@
 services:
   backend:
     build: .
-    image: tripmate-backend
+    image: vivekhegde78/tripmate-backend:v1
     env_file:
-      - .env
+      - ./langgraph-backend/.env
     ports:
       - "127.0.0.1:8000:8000"
 
   frontend:
     build: ./frontend
-    image: tripmate-frontend
+    image: vivekhegde78/tripmate-frontend:v1
     ports:
-      - "127.0.0.1:8080:80"
+      - "127.0.0.1:5173:80"
     depends_on:
       - backend

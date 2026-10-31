@@ -11,8 +11,8 @@ from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage
 from langchain_core.prompts import MessagesPlaceholder
 
-from tripmateai_langgraph_multiagent.tools.flight_tool import aviationStack_tool
-from tripmateai_langgraph_multiagent.graph_schema import graph_schema
+from src.tools.flight_tool import aviationStack_tool
+from src.graph_schema import graph_schema
 
 llm_model = init_chat_model(model="gpt-5-nano")
 
